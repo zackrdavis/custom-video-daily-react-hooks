@@ -5,7 +5,7 @@ export default function Header() {
     <header>
       <div className="header-section">
         <img src="/images/logo.svg" alt="Daily logo" />
-        <span className="title">Custom video application demo with Daily React</span>
+        <span className="title">Just gonna try it</span>
       </div>
       <div className="header-section">
         <a
