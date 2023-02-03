@@ -5,6 +5,10 @@ import { Arrow } from '../Tray/Icons/index';
 import './Chat.css';
 
 export default function Chat({ showChat, toggleChat }) {
+  const onAnyMessage = (msg, name) => {
+    console.log(msg, name);
+  };
+
   const localParticipant = useLocalParticipant();
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
@@ -18,7 +22,7 @@ export default function Chat({ showChat, toggleChat }) {
           name: ev.data.name,
         },
       ]);
-      console.log(ev.data.msg, ev.data.name);
+      onAnyMessage(ev.data.msg, ev.data.name);
     }, []),
   });
 
@@ -45,6 +49,7 @@ export default function Chat({ showChat, toggleChat }) {
           name: localParticipant?.user_name || 'Guest',
         },
       ]);
+      onAnyMessage(message, localParticipant?.user_name || 'Guest');
     },
     [localParticipant, messages, sendAppMessage],
   );

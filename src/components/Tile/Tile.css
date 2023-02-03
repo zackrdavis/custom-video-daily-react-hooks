@@ -13,6 +13,10 @@
   height: 270px;
 }
 
+.tile-video.spin .self-view {
+  animation: rotation 2s infinite linear;
+}
+
 @media only screen and (max-width: 600px) {
   .tile-video {
     width: 240px;
@@ -24,7 +28,6 @@
   width: 480px;
   height: 270px;
   position: relative;
-  animation: rotation 2s infinite linear;
 }
 
 @media only screen and (max-width: 600px) {
