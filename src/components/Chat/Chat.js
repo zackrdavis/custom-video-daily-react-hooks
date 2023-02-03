@@ -10,17 +10,16 @@ export default function Chat({ showChat, toggleChat }) {
   const [inputValue, setInputValue] = useState('');
 
   const sendAppMessage = useAppMessage({
-    onAppMessage: useCallback(
-      (ev) =>
-        setMessages((existingMessages) => [
-          ...existingMessages,
-          {
-            msg: ev.data.msg,
-            name: ev.data.name,
-          },
-        ]),
-      [],
-    ),
+    onAppMessage: useCallback((ev) => {
+      setMessages((existingMessages) => [
+        ...existingMessages,
+        {
+          msg: ev.data.msg,
+          name: ev.data.name,
+        },
+      ]);
+      console.log(ev.data.msg, ev.data.name);
+    }, []),
   });
 
   const sendMessage = useCallback(
@@ -46,7 +45,6 @@ export default function Chat({ showChat, toggleChat }) {
           name: localParticipant?.user_name || 'Guest',
         },
       ]);
-      console.log(messages);
     },
     [localParticipant, messages, sendAppMessage],
   );
