@@ -1,29 +1,9 @@
 import './Tile.css';
-import { useState, useCallback } from 'react';
-import { DailyVideo, useAppMessage } from '@daily-co/daily-react';
+import { DailyVideo } from '@daily-co/daily-react';
 import Username from '../Username/Username';
 
-export default function Tile({ id, isScreenShare, isLocal, isAlone }) {
-  const [newestMessage, setNewestMessage] = useState({ name: '', msg: '' });
-
-  useAppMessage({
-    onAppMessage: useCallback((ev) => {
-      console.log(ev.data);
-      setNewestMessage({ name: ev.data.name, msg: ev.data.msg });
-    }, []),
-  });
-
-  let moveCommand = '';
-
-  if (newestMessage.msg === 'stop') {
-    moveCommand = '';
-  } else {
-    moveCommand = newestMessage.msg;
-  }
-
+export default function Tile({ id, isScreenShare, isLocal, isAlone, commands }) {
   let containerCssClasses = isScreenShare ? 'tile-screenshare' : 'tile-video';
-
-  containerCssClasses += ` ${moveCommand}`;
 
   if (isLocal) {
     containerCssClasses += ' self-view';
@@ -31,6 +11,10 @@ export default function Tile({ id, isScreenShare, isLocal, isAlone }) {
       containerCssClasses += ' alone';
     }
   }
+
+  // add user movement commands as classes
+  containerCssClasses += ` ${commands.split(' ')}`;
+
   return (
     <div className={containerCssClasses}>
       <DailyVideo automirror sessionId={id} type={isScreenShare ? 'screenVideo' : 'video'} />

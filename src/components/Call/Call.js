@@ -11,7 +11,7 @@ import './Call.css';
 import Tile from '../Tile/Tile';
 import UserMediaError from '../UserMediaError/UserMediaError';
 
-export default function Call() {
+export default function Call({ allMessages }) {
   /* If a participant runs into a getUserMedia() error, we need to warn them. */
   const [getUserMediaError, setGetUserMediaError] = useState(false);
 
@@ -35,15 +35,23 @@ export default function Call() {
     [remoteParticipantIds, screens],
   );
 
+  console.log(allMessages);
+
+  const newestMessage = allMessages[allMessages.length - 1];
+
+  const commands = [newestMessage.msg];
+
   const renderCallScreen = () => (
     <div className={`${screens.length > 0 ? 'is-screenshare' : 'call'}`}>
       {/* Your self view */}
-      {localParticipant && <Tile id={localParticipant.session_id} isLocal isAlone={isAlone} />}
+      {localParticipant && (
+        <Tile id={localParticipant.session_id} isLocal isAlone={isAlone} commands={commands} />
+      )}
       {/* Videos of remote participants and screen shares */}
       {remoteParticipantIds?.length > 0 || screens?.length > 0 ? (
         <>
           {remoteParticipantIds.map((id) => (
-            <Tile key={id} id={id} />
+            <Tile key={id} id={id} commands={commands} />
           ))}
           {screens.map((screen) => (
             <Tile key={screen.screenId} id={screen.session_id} isScreenShare />

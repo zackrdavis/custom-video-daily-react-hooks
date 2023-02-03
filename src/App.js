@@ -28,6 +28,8 @@ export default function App() {
   const [callObject, setCallObject] = useState(null);
   const [apiError, setApiError] = useState(false);
 
+  const [allMessages, setAllMessages] = useState([]);
+
   /**
    * Create a new call room. This function will return the newly created room URL.
    * We'll need this URL when pre-authorizing (https://docs.daily.co/reference/rn-daily-js/instance-methods/pre-auth)
@@ -196,8 +198,12 @@ export default function App() {
     if (showCall) {
       return (
         <DailyProvider callObject={callObject}>
-          <Call />
-          <Tray leaveCall={startLeavingCall} />
+          <Call allMessages={allMessages} />
+          <Tray
+            leaveCall={startLeavingCall}
+            allMessages={allMessages}
+            setAllMessages={setAllMessages}
+          />
         </DailyProvider>
       );
     }

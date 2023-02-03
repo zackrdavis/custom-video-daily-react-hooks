@@ -4,9 +4,9 @@ import { useAppMessage, useLocalParticipant } from '@daily-co/daily-react';
 import { Arrow } from '../Tray/Icons/index';
 import './Chat.css';
 
-export default function Chat({ showChat, toggleChat }) {
+export default function Chat({ showChat, toggleChat, allMessages, setAllMessages }) {
   const onAnyMessage = (msg, name) => {
-    console.log(msg, name);
+    setAllMessages([...allMessages, { msg, name }]);
   };
 
   const localParticipant = useLocalParticipant();
