@@ -13,7 +13,7 @@
   height: 270px;
 }
 
-.tile-video.spin .self-view {
+.tile-video.spin {
   animation: rotation 2s infinite linear;
 }
 
