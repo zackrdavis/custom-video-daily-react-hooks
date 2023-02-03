@@ -7,6 +7,18 @@
   }
 }
 
+@keyframes bounce {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-100px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
 .tile-video {
   position: relative;
   width: 480px;
@@ -15,6 +27,10 @@
 
 .tile-video.spin {
   animation: rotation 2s infinite linear;
+}
+
+.tile-video.bounce {
+  animation: bounce 2s infinite ease;
 }
 
 @media only screen and (max-width: 600px) {
