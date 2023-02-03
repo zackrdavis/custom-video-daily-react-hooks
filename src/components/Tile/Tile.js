@@ -4,7 +4,7 @@ import { DailyVideo, useAppMessage } from '@daily-co/daily-react';
 import Username from '../Username/Username';
 
 export default function Tile({ id, isScreenShare, isLocal, isAlone }) {
-  const [newestMessage, setNewestMessage] = useState(undefined);
+  const [newestMessage, setNewestMessage] = useState({ name: '', msg: '' });
 
   useAppMessage({
     onAppMessage: useCallback((ev) => {
