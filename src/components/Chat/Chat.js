@@ -46,7 +46,7 @@ export default function Chat({ showChat, toggleChat }) {
           name: localParticipant?.user_name || 'Guest',
         },
       ]);
-      console.log(message, localParticipant?.user_name || 'Guest');
+      console.log(messages);
     },
     [localParticipant, messages, sendAppMessage],
   );
