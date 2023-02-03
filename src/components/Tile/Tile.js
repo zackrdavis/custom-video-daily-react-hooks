@@ -23,7 +23,7 @@ export default function Tile({ id, isScreenShare, isLocal, isAlone }) {
 
   let containerCssClasses = isScreenShare ? 'tile-screenshare' : 'tile-video';
 
-  containerCssClasses += moveCommand;
+  containerCssClasses += ` ${moveCommand}`;
 
   if (isLocal) {
     containerCssClasses += ' self-view';
