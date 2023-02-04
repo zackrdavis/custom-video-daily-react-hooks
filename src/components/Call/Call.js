@@ -52,6 +52,10 @@ export default function Call({ newestMessage }) {
     setCommands(newCommands);
   }, [newestMessage]);
 
+  useEffect(() => {
+    console.log(commands);
+  }, [commands]);
+
   /* If a participant runs into a getUserMedia() error, we need to warn them. */
   const [getUserMediaError, setGetUserMediaError] = useState(false);
 
