@@ -1,17 +1,57 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
   useParticipantIds,
   useScreenShare,
-  useLocalParticipant,
   useDailyEvent,
   DailyAudio,
+  useDaily,
 } from '@daily-co/daily-react';
 
 import './Call.css';
 import Tile from '../Tile/Tile';
 import UserMediaError from '../UserMediaError/UserMediaError';
 
-export default function Call({ allMessages }) {
+export default function Call({ newestMessage }) {
+  const callObject = useDaily();
+
+  const [commands, setCommands] = useState(undefined);
+
+  useEffect(() => {
+    const participants = {};
+    Object.entries(callObject.participants()).forEach((e) => {
+      participants[e[1].user_name] = e[1].session_id;
+    });
+
+    const newCommands = { ...commands };
+
+    // loop through all participants
+    Object.entries(participants).forEach(([name, id]) => {
+      // initialize a Set of commands for each user ID
+      if (!newCommands[id]) {
+        newCommands[id] = new Set();
+      }
+
+      // if the new message addresses them by name
+      if (newestMessage.msg.startsWith(name)) {
+        const possibleCommand = newestMessage.msg.replace(name, '').trim();
+
+        if (possibleCommand === 'stop') {
+          newCommands[id] = new Set();
+        }
+
+        if (possibleCommand === 'spin') {
+          newCommands[id].add('spin');
+        }
+
+        if (possibleCommand === 'bounce') {
+          newCommands[id].add('bounce');
+        }
+      }
+    });
+
+    setCommands(newCommands);
+  }, [newestMessage]);
+
   /* If a participant runs into a getUserMedia() error, we need to warn them. */
   const [getUserMediaError, setGetUserMediaError] = useState(false);
 
@@ -26,46 +66,23 @@ export default function Call({ allMessages }) {
 
   /* This is for displaying remote participants: this includes other humans, but also screen shares. */
   const { screens } = useScreenShare();
-  const remoteParticipantIds = useParticipantIds({ filter: 'remote' });
-
-  /* This is for displaying our self-view. */
-  const localParticipant = useLocalParticipant();
-  const isAlone = useMemo(
-    () => remoteParticipantIds?.length < 1 || screens?.length < 1,
-    [remoteParticipantIds, screens],
-  );
-
-  console.log(allMessages);
-
-  const newestMessage = allMessages[allMessages.length - 1];
-
-  const commands = [newestMessage.msg];
+  const participantIds = useParticipantIds({ sort: 'joined_at' });
 
   const renderCallScreen = () => (
     <div className={`${screens.length > 0 ? 'is-screenshare' : 'call'}`}>
-      {/* Your self view */}
-      {localParticipant && (
-        <Tile id={localParticipant.session_id} isLocal isAlone={isAlone} commands={commands} />
-      )}
-      {/* Videos of remote participants and screen shares */}
-      {remoteParticipantIds?.length > 0 || screens?.length > 0 ? (
-        <>
-          {remoteParticipantIds.map((id) => (
-            <Tile key={id} id={id} commands={commands} />
-          ))}
-          {screens.map((screen) => (
-            <Tile key={screen.screenId} id={screen.session_id} isScreenShare />
-          ))}
-          <DailyAudio />
-        </>
-      ) : (
-        // When there are no remote participants or screen shares
-        <div className="info-box">
-          <h1>Waiting for others</h1>
-          <p>Invite someone by sharing this link:</p>
-          <span className="room-url">{window.location.href}</span>
-        </div>
-      )}
+      {/* Videos of participants and screen shares */}
+      {participantIds.map((id) => (
+        <Tile
+          key={id}
+          id={id}
+          commands={commands && commands[id] ? Array.from(commands[id]) : []}
+        />
+      ))}
+      {screens.map((screen) => (
+        <Tile key={screen.screenId} id={screen.session_id} isScreenShare />
+      ))}
+
+      <DailyAudio />
     </div>
   );
 

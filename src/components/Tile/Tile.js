@@ -13,7 +13,7 @@ export default function Tile({ id, isScreenShare, isLocal, isAlone, commands }) 
   }
 
   // add user movement commands as classes
-  containerCssClasses += ` ${commands.split(' ')}`;
+  containerCssClasses += ` ${commands.join(' ')}`;
 
   return (
     <div className={containerCssClasses}>

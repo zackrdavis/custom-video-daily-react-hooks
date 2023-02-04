@@ -24,7 +24,7 @@ import {
   ChatHighlighted,
 } from './Icons';
 
-export default function Tray({ leaveCall, allMessages, setAllMessages }) {
+export default function Tray({ leaveCall, collectLocalMsg }) {
   const callObject = useDaily();
   const { isSharingScreen, startScreenShare, stopScreenShare } = useScreenShare();
 
@@ -82,12 +82,7 @@ export default function Tray({ leaveCall, allMessages, setAllMessages }) {
 
       {/*   We're also passing down the toggleChat() function to the component, so we can open and close the chat */}
       {/*   from the chat UI and not just the Tray. */}
-      <Chat
-        showChat={showChat}
-        toggleChat={toggleChat}
-        allMessages={allMessages}
-        setAllMessages={setAllMessages}
-      />
+      <Chat showChat={showChat} toggleChat={toggleChat} collectLocalMsg={collectLocalMsg} />
       <div className="tray-buttons-container">
         <div className="controls">
           <button onClick={toggleVideo} type="button">

@@ -4,11 +4,7 @@ import { useAppMessage, useLocalParticipant } from '@daily-co/daily-react';
 import { Arrow } from '../Tray/Icons/index';
 import './Chat.css';
 
-export default function Chat({ showChat, toggleChat, allMessages, setAllMessages }) {
-  const onAnyMessage = (msg, name) => {
-    setAllMessages([...allMessages, { msg, name }]);
-  };
-
+export default function Chat({ showChat, toggleChat, collectLocalMsg }) {
   const localParticipant = useLocalParticipant();
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
@@ -22,7 +18,7 @@ export default function Chat({ showChat, toggleChat, allMessages, setAllMessages
           name: ev.data.name,
         },
       ]);
-      onAnyMessage(ev.data.msg, ev.data.name);
+      collectLocalMsg(ev.data);
     }, []),
   });
 
@@ -49,7 +45,8 @@ export default function Chat({ showChat, toggleChat, allMessages, setAllMessages
           name: localParticipant?.user_name || 'Guest',
         },
       ]);
-      onAnyMessage(message, localParticipant?.user_name || 'Guest');
+
+      collectLocalMsg({ msg: message, name: localParticipant?.user_name || 'Guest' });
     },
     [localParticipant, messages, sendAppMessage],
   );

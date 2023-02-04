@@ -5,7 +5,7 @@ export default function Header() {
     <header>
       <div className="header-section">
         <img src="/images/logo.svg" alt="Daily logo" />
-        <span className="title">Just gonna try it</span>
+        <span className="title">{window.location.href}</span>
       </div>
       <div className="header-section">
         <a

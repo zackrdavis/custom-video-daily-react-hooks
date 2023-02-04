@@ -28,7 +28,13 @@ export default function App() {
   const [callObject, setCallObject] = useState(null);
   const [apiError, setApiError] = useState(false);
 
-  const [allMessages, setAllMessages] = useState([]);
+  // keeps all messages, both local and remote, in one list
+  const [newestMessage, setNewestMessage] = useState({ name: '', msg: '' });
+
+  // capture messages from this app user
+  const collectLocalMsg = (msgData) => {
+    setNewestMessage(msgData);
+  };
 
   /**
    * Create a new call room. This function will return the newly created room URL.
@@ -198,12 +204,8 @@ export default function App() {
     if (showCall) {
       return (
         <DailyProvider callObject={callObject}>
-          <Call allMessages={allMessages} />
-          <Tray
-            leaveCall={startLeavingCall}
-            allMessages={allMessages}
-            setAllMessages={setAllMessages}
-          />
+          <Call newestMessage={newestMessage} />
+          <Tray leaveCall={startLeavingCall} collectLocalMsg={collectLocalMsg} />
         </DailyProvider>
       );
     }
